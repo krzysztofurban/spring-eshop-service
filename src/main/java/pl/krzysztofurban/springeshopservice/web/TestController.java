@@ -18,11 +18,24 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 public class TestController {
-    private final OrderServiceWithFiegn orderService;
+    private final OrderServiceWithFiegn orderServiceWithFiegn;
+    private final OrderService orderService;
     private final ProductService productService;
     private final CustomerService customerService;
 
-    @PostMapping(value = "/api/orders", produces = "application/json")
+    @PostMapping(value = "/api/feign/orders", produces = "application/json")
+    public ResponseEntity<?> purchaseSampleProductUsingFeign() throws Exception {
+        customerService.registerNewCustomer();
+        productService.registerNewProduct();
+        Order order = orderServiceWithFiegn.orderProduct();
+
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(order.getOrderId()).toUri();
+
+        return ResponseEntity.created(uri).build();
+    }
+
+    @PostMapping(value = "/api/hystrix/orders", produces = "application/json")
     public ResponseEntity<?> purchaseSampleProduct() throws Exception {
         customerService.registerNewCustomer();
         productService.registerNewProduct();

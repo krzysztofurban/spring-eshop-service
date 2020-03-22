@@ -1,6 +1,8 @@
 package pl.krzysztofurban.springeshopservice.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,15 @@ public class OrderService {
     @LoadBalanced
     RestTemplate restTemplate;
 
+    @HystrixCommand(
+            fallbackMethod = "handleInventoryFailure",
+            commandProperties = {
+                    @HystrixProperty(name =
+                            "execution.isolation.thread.timeoutInMilliseconds", value =
+                            "3000"),
+                    @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold",
+                            value ="2")
+            })
     public Order orderProduct() {
         Order order = null;
 
