@@ -42,7 +42,7 @@ public class OrderService {
         Map<String, Double> map = null;
         ObjectMapper mapper = new ObjectMapper();
 
-        String resultJson = this.restTemplate.getForObject("http://INVENTORY-SERVICE/inventory/api/inventory" + 1, String.class);
+        String resultJson = this.restTemplate.getForObject("http://INVENTORY-SERVICE/inventory/api/inventory/" + 1, String.class);
         try {
             map = mapper.readValue(resultJson.getBytes(), HashMap.class);
             log.info("result from inventory service: {}", map);
