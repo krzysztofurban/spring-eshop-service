@@ -1,0 +1,34 @@
+server:
+  servlet:
+    context-path: /eshop
+  port: 8081
+
+spring:
+  application:
+    name: eshop
+  datasource:
+    url: jdbc:mysql://localhsot:3306/db1
+    username: root
+    password: mysql
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+  boot:
+    admin:
+      client:
+        url: http://localhost:7777/admin
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
